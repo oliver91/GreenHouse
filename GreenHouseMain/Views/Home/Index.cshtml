@@ -2,6 +2,9 @@
     ViewBag.Title = "Home Page";
 }
 
+@model IEnumerable<GreenHouseMain.Models.Room>
+
+
 <div class="container">
     <div class="row">
         <div class="admin-profile-info col-xs-12 col-sm-6">
@@ -20,6 +23,12 @@
     <div class="row">
         <div class="col-sm-6">
             <h5>Забронированные комнаты</h5>
+
+            @foreach (var item in Model)
+            {
+                @item.Number.ToString();
+            }
+
         </div>
     </div>
 </div>

@@ -1,0 +1,404 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Database1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AdditEquipments">
+          <Key>
+            <PropertyRef Name="EquipId" />
+          </Key>
+          <Property Name="EquipId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AdditEquipmentsRooms">
+          <Key>
+            <PropertyRef Name="RoomId" />
+            <PropertyRef Name="EquipId" />
+          </Key>
+          <Property Name="RoomId" Type="int" Nullable="false" />
+          <Property Name="EquipId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Blocks">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoomId" />
+            <PropertyRef Name="BeginTime" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="RoomId" Type="int" Nullable="false" />
+          <Property Name="BeginTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Reservations">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoomId" />
+            <PropertyRef Name="BeginTime" />
+            <PropertyRef Name="EndTime" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="RoomId" Type="int" Nullable="false" />
+          <Property Name="BeginTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+          <Property Name="Purpose" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rooms">
+          <Key>
+            <PropertyRef Name="RoomId" />
+          </Key>
+          <Property Name="RoomId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Number" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Floor" Type="int" Nullable="false" />
+          <Property Name="Capacity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsAdmin" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_AdditEquipmentsRooms_EquipId">
+          <End Role="AdditEquipments" Type="Self.AdditEquipments" Multiplicity="1" />
+          <End Role="AdditEquipmentsRooms" Type="Self.AdditEquipmentsRooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdditEquipments">
+              <PropertyRef Name="EquipId" />
+            </Principal>
+            <Dependent Role="AdditEquipmentsRooms">
+              <PropertyRef Name="EquipId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdditEquipmentsRooms_RoomId">
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="1" />
+          <End Role="AdditEquipmentsRooms" Type="Self.AdditEquipmentsRooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rooms">
+              <PropertyRef Name="RoomId" />
+            </Principal>
+            <Dependent Role="AdditEquipmentsRooms">
+              <PropertyRef Name="RoomId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FR_Blocks_RoomId">
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="1" />
+          <End Role="Blocks" Type="Self.Blocks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rooms">
+              <PropertyRef Name="RoomId" />
+            </Principal>
+            <Dependent Role="Blocks">
+              <PropertyRef Name="RoomId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FR_Blocks_UserId">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Blocks" Type="Self.Blocks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Blocks">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FR_Reservations_RoomId">
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="1" />
+          <End Role="Reservations" Type="Self.Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rooms">
+              <PropertyRef Name="RoomId" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FR_Reservations_UserId">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Reservations" Type="Self.Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Database1ModelStoreContainer">
+          <EntitySet Name="AdditEquipments" EntityType="Self.AdditEquipments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AdditEquipmentsRooms" EntityType="Self.AdditEquipmentsRooms" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Blocks" EntityType="Self.Blocks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reservations" EntityType="Self.Reservations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AdditEquipmentsRooms_EquipId" Association="Self.FK_AdditEquipmentsRooms_EquipId">
+            <End Role="AdditEquipments" EntitySet="AdditEquipments" />
+            <End Role="AdditEquipmentsRooms" EntitySet="AdditEquipmentsRooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdditEquipmentsRooms_RoomId" Association="Self.FK_AdditEquipmentsRooms_RoomId">
+            <End Role="Rooms" EntitySet="Rooms" />
+            <End Role="AdditEquipmentsRooms" EntitySet="AdditEquipmentsRooms" />
+          </AssociationSet>
+          <AssociationSet Name="FR_Blocks_RoomId" Association="Self.FR_Blocks_RoomId">
+            <End Role="Rooms" EntitySet="Rooms" />
+            <End Role="Blocks" EntitySet="Blocks" />
+          </AssociationSet>
+          <AssociationSet Name="FR_Blocks_UserId" Association="Self.FR_Blocks_UserId">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Blocks" EntitySet="Blocks" />
+          </AssociationSet>
+          <AssociationSet Name="FR_Reservations_RoomId" Association="Self.FR_Reservations_RoomId">
+            <End Role="Rooms" EntitySet="Rooms" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FR_Reservations_UserId" Association="Self.FR_Reservations_UserId">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Database1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AdditEquipments">
+          <Key>
+            <PropertyRef Name="EquipId" />
+          </Key>
+          <Property Name="EquipId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Rooms" Relationship="Self.AdditEquipmentsRooms" FromRole="AdditEquipments" ToRole="Rooms" />
+        </EntityType>
+        <EntityType Name="Blocks">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoomId" />
+            <PropertyRef Name="BeginTime" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="RoomId" Type="Int32" Nullable="false" />
+          <Property Name="BeginTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Rooms" Relationship="Self.FR_Blocks_RoomId" FromRole="Blocks" ToRole="Rooms" />
+          <NavigationProperty Name="Users" Relationship="Self.FR_Blocks_UserId" FromRole="Blocks" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Reservations">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoomId" />
+            <PropertyRef Name="BeginTime" />
+            <PropertyRef Name="EndTime" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="RoomId" Type="Int32" Nullable="false" />
+          <Property Name="BeginTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Purpose" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Rooms" Relationship="Self.FR_Reservations_RoomId" FromRole="Reservations" ToRole="Rooms" />
+          <NavigationProperty Name="Users" Relationship="Self.FR_Reservations_UserId" FromRole="Reservations" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Rooms">
+          <Key>
+            <PropertyRef Name="RoomId" />
+          </Key>
+          <Property Name="RoomId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Number" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Floor" Type="Int32" Nullable="false" />
+          <Property Name="Capacity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Blocks" Relationship="Self.FR_Blocks_RoomId" FromRole="Rooms" ToRole="Blocks" />
+          <NavigationProperty Name="Reservations" Relationship="Self.FR_Reservations_RoomId" FromRole="Rooms" ToRole="Reservations" />
+          <NavigationProperty Name="AdditEquipments" Relationship="Self.AdditEquipmentsRooms" FromRole="Rooms" ToRole="AdditEquipments" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Blocks" Relationship="Self.FR_Blocks_UserId" FromRole="Users" ToRole="Blocks" />
+          <NavigationProperty Name="Reservations" Relationship="Self.FR_Reservations_UserId" FromRole="Users" ToRole="Reservations" />
+        </EntityType>
+        <Association Name="FR_Blocks_RoomId">
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="1" />
+          <End Role="Blocks" Type="Self.Blocks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rooms">
+              <PropertyRef Name="RoomId" />
+            </Principal>
+            <Dependent Role="Blocks">
+              <PropertyRef Name="RoomId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FR_Blocks_UserId">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Blocks" Type="Self.Blocks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Blocks">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FR_Reservations_RoomId">
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="1" />
+          <End Role="Reservations" Type="Self.Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rooms">
+              <PropertyRef Name="RoomId" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FR_Reservations_UserId">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Reservations" Type="Self.Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AdditEquipmentsRooms">
+          <End Role="AdditEquipments" Type="Self.AdditEquipments" Multiplicity="*" />
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="Database1Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AdditEquipments" EntityType="Self.AdditEquipments" />
+          <EntitySet Name="Blocks" EntityType="Self.Blocks" />
+          <EntitySet Name="Reservations" EntityType="Self.Reservations" />
+          <EntitySet Name="Rooms" EntityType="Self.Rooms" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FR_Blocks_RoomId" Association="Self.FR_Blocks_RoomId">
+            <End Role="Rooms" EntitySet="Rooms" />
+            <End Role="Blocks" EntitySet="Blocks" />
+          </AssociationSet>
+          <AssociationSet Name="FR_Blocks_UserId" Association="Self.FR_Blocks_UserId">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Blocks" EntitySet="Blocks" />
+          </AssociationSet>
+          <AssociationSet Name="FR_Reservations_RoomId" Association="Self.FR_Reservations_RoomId">
+            <End Role="Rooms" EntitySet="Rooms" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FR_Reservations_UserId" Association="Self.FR_Reservations_UserId">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="AdditEquipmentsRooms" Association="Self.AdditEquipmentsRooms">
+            <End Role="AdditEquipments" EntitySet="AdditEquipments" />
+            <End Role="Rooms" EntitySet="Rooms" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Database1ModelStoreContainer" CdmEntityContainer="Database1Entities">
+          <EntitySetMapping Name="AdditEquipments">
+            <EntityTypeMapping TypeName="Database1Model.AdditEquipments">
+              <MappingFragment StoreEntitySet="AdditEquipments">
+                <ScalarProperty Name="EquipId" ColumnName="EquipId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Blocks">
+            <EntityTypeMapping TypeName="Database1Model.Blocks">
+              <MappingFragment StoreEntitySet="Blocks">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="RoomId" ColumnName="RoomId" />
+                <ScalarProperty Name="BeginTime" ColumnName="BeginTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reservations">
+            <EntityTypeMapping TypeName="Database1Model.Reservations">
+              <MappingFragment StoreEntitySet="Reservations">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="RoomId" ColumnName="RoomId" />
+                <ScalarProperty Name="BeginTime" ColumnName="BeginTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="Purpose" ColumnName="Purpose" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rooms">
+            <EntityTypeMapping TypeName="Database1Model.Rooms">
+              <MappingFragment StoreEntitySet="Rooms">
+                <ScalarProperty Name="RoomId" ColumnName="RoomId" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Floor" ColumnName="Floor" />
+                <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="Database1Model.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FName" ColumnName="FName" />
+                <ScalarProperty Name="SName" ColumnName="SName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AdditEquipmentsRooms" TypeName="Database1Model.AdditEquipmentsRooms" StoreEntitySet="AdditEquipmentsRooms">
+            <EndProperty Name="AdditEquipments">
+              <ScalarProperty Name="EquipId" ColumnName="EquipId" />
+            </EndProperty>
+            <EndProperty Name="Rooms">
+              <ScalarProperty Name="RoomId" ColumnName="RoomId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
